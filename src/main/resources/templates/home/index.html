@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>User Home - Library System</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <h2>Library System - User Home</h2>
+    <div class="links">
+      <!-- Show 'Logout' if user is logged in -->
+      <a th:if="${session.loggedInUser != null}" th:href="@{/profile}">Profile</a>
+      <a th:if="${session.loggedInUser != null}" th:href="@{/logout}">Logout</a>
+  
+      <!-- Show 'Login' if user is not logged in -->
+      <a th:if="${session.loggedInUser == null}" th:href="@{/login}">Login</a>
+    </div>
+  </div>
+  
+
+  <!-- Welcome -->
+  <div class="welcome">
+    <h1>Welcome, <span th:text="${session.loggedInUser?.name} ?: 'Username'">Username</span></h1>
+    <p>Explore books, check your borrow history, and manage your account.</p>
+  </div>
+
+  <!-- Action Cards -->
+  <div class="actions">
+    <div class="card">
+      <h3>View Books</h3>
+      <p>Browse the entire collection of available books.</p>
+      <a th:href="@{/books}">Browse</a>
+    </div>
+    <div class="card">
+      <h3>Borrowed Books</h3>
+      <p>Check the books you’ve currently borrowed.</p>
+      <a th:href="@{/borrowed}">View</a>
+    </div>
+    <div class="card">
+      <h3>Return History</h3>
+      <p>See the books you've returned previously.</p>
+      <a th:href="@{/history}">History</a>
+    </div>
+    <div class="card">
+      <h3>Update Profile</h3>
+      <p>Edit your personal information and contact details.</p>
+      <a th:href="@{/profile/edit}">Edit</a>
+    </div>
+  </div>
+
+</body>
+</html>
