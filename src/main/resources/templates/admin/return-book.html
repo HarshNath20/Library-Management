@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Return Books</title>
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h4>Admin Panel</h4>
+    <a th:href="@{/admin/dashboard}">Dashboard</a>
+    <a th:href="@{/admin/books}">Books</a>
+    <a th:href="@{/admin/members}">Members</a>
+    <a th:href="@{/admin/issue}">Issue Books</a>
+    <a href="#" class="active">Return Books</a>
+    <a th:href="@{/admin/reports}">Reports</a>
+  </div>
+
+  <!-- Main content -->
+  <div class="main">
+    
+    <!-- Top Navbar -->
+    <div class="topnav">
+      <h2>Book Returns Management</h2>
+      <div class="nav-links">
+        <a th:text="${session.loggedInUser.name}" href="#">Admin</a>
+        <a th:href="@{/logout}">Logout</a>
+      </div>
+    </div>
+
+    <!-- Return Book Section -->
+    <div class="return-section">
+      <!-- Return Form -->
+      <div class="card return-form-card">
+        <h3>Return a Book</h3>
+        
+        <form th:action="@{/admin/return}" method="post" class="return-form">
+          <div class="form-group">
+            <label for="issueId">Select Issued Book</label>
+            <select id="issueId" name="issueId" class="form-control" required>
+              <option value="">Select Issued Book</option>
+              <option th:each="issue : ${issuedBooks}" 
+                      th:value="${issue.id}"
+                      th:text="${issue.bookTitle + ' (Issued to: ' + issue.memberName + ')'}">
+              </option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="returnDate">Return Date</label>
+            <input type="date" id="returnDate" name="returnDate" class="form-control" th:value="${#temporals.format(today, 'yyyy-MM-dd')}" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="fineAmount">Fine Amount (if applicable)</label>
+            <input type="number" id="fineAmount" name="fineAmount" class="form-control" placeholder="0.00" step="0.01" min="0">
+          </div>
+          
+          <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" class="form-control" rows="3" placeholder="Any additional notes..."></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-return">Process Return</button>
+        </form>
+      </div>
+      
+      <!-- Recent Returns -->
+      <div class="card recent-returns-card">
+        <h3>Recent Returns</h3>
+        
+        <div class="search-filter">
+          <input type="text" placeholder="Search returns..." class="search-input" id="returnsSearch">
+          <select class="filter-select">
+            <option>All Returns</option>
+            <option>Last 7 Days</option>
+            <option>With Fines</option>
+            <option>On Time</option>
+          </select>
+          <button class="btn btn-search">Filter</button>
+        </div>
+        
+        <table class="returns-table">
+          <thead>
+            <tr>
+              <th>Return ID</th>
+              <th>Book</th>
+              <th>Member</th>
+              <th>Issued On</th>
+              <th>Returned On</th>
+              <th>Fine</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="return : ${recentReturns}">
+              <td th:text="${return.id}">RET-1001</td>
+              <td th:text="${return.bookTitle}">The Great Gatsby</td>
+              <td th:text="${return.memberName}">John Doe</td>
+              <td th:text="${#temporals.format(return.issueDate, 'yyyy-MM-dd')}">2023-05-15</td>
+              <td th:text="${#temporals.format(return.returnDate, 'yyyy-MM-dd')}">2023-06-10</td>
+              <td th:text="${return.fine != null ? '$' + return.fine : 'None'}">$5.00</td>
+              <td>
+                <span th:if="${return.overdue}" class="status-overdue">Late</span>
+                <span th:unless="${return.overdue}" class="status-ontime">On Time</span>
+              </td>
+            </tr>
+            <tr th:if="${recentReturns == null or #lists.isEmpty(recentReturns)}">
+              <td colspan="7">No recent returns found</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div class="pagination">
+          <a href="#">&laquo;</a>
+          <a href="#" class="active">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">&raquo;</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Return Statistics -->
+    <div class="stats-section">
+      <div class="stat-card stat-primary">
+        <h4>Today's Returns</h4>
+        <p th:text="${todaysReturns}" class="stat-number">5</p>
+      </div>
+      <div class="stat-card stat-warning">
+        <h4>Overdue Returns</h4>
+        <p th:text="${overdueReturns}" class="stat-number">3</p>
+      </div>
+      <div class="stat-card stat-danger">
+        <h4>Total Fines</h4>
+        <p th:text="${'$' + totalFines}" class="stat-number">$45.50</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
