@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Library Admin Panel</title>
   <link rel="stylesheet" th:href="@{/css/dashboard.css}">
 </head>
+
 <body>
 
   <!-- Sidebar -->
@@ -16,17 +18,16 @@
     <a th:href="@{/admin/members}">Members</a>
     <a th:href="@{/admin/issue}">Issue Books</a>
     <a th:href="@{/admin/return}">Return Books</a>
-    <a th:href="@{/admin/reports}">Reports</a>
   </div>
 
   <!-- Main content -->
   <div class="main">
-    
+
     <!-- Top Navbar -->
     <div class="topnav">
       <h2>Library Management System</h2>
       <div class="nav-links">
-        <a th:text="${session.loggedInUser.name}" href="#">Admin</a>
+        <a href="#">Admin</a>
         <a th:href="@{/logout}">Logout</a>
       </div>
     </div>
@@ -62,4 +63,5 @@
 
   </div>
 </body>
+
 </html>

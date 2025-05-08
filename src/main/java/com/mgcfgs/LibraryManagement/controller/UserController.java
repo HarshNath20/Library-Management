@@ -1,5 +1,7 @@
 package com.mgcfgs.LibraryManagement.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,8 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mgcfgs.LibraryManagement.model.Book;
 import com.mgcfgs.LibraryManagement.model.LoginUser;
 import com.mgcfgs.LibraryManagement.model.RegisterUser;
+import com.mgcfgs.LibraryManagement.services.BooksServices;
 import com.mgcfgs.LibraryManagement.services.UserServices;
 
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +25,9 @@ public class UserController {
 
     @Autowired
     private UserServices userServices;
+
+    @Autowired
+    private BooksServices booksServices;
 
     @GetMapping("/register")
     public String registerPage(Model model) {
@@ -92,7 +99,7 @@ public class UserController {
         session.setAttribute("loggedInUser", dbUser);
 
         if (dbUser.getRole().equals("ADMIN")) {
-            return "redirect:/admin"; // redirect to admin dashboard
+            return "redirect:/admin/dashboard"; // redirect to admin dashboard
         } else {
             redirectAttributes.addFlashAttribute("message", "Login successful!");
             return "redirect:/"; // redirect to home page
@@ -109,6 +116,19 @@ public class UserController {
             return "redirect:/register?deleted"; // or home page
         }
         return "redirect:/login";
+    }
+
+    @GetMapping("/view-books")
+    public String viewBooks(HttpSession session, Model model) {
+        // This method retrieves all books from the database and adds them to the model
+        List<Book> books = booksServices.getAllBooks();
+        RegisterUser user = (RegisterUser) session.getAttribute("loggedInUser");
+        // if (user == null) {
+        // return "redirect:/login";
+        // }
+        model.addAttribute("loggedInUser", user);
+        model.addAttribute("books", books);
+        return "user/viewBooks"; // create view-books.html page in templates/user
     }
 
 }

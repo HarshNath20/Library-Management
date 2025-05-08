@@ -1,36 +1,72 @@
 package com.mgcfgs.LibraryManagement.model;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.ISBN;
+import org.hibernate.validator.constraints.URL;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "books")
 public class Book {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @NotBlank(message = "Title is required")
+    @Size(max = 200, message = "Title cannot exceed 200 characters")
     @Column(nullable = false)
     private String title;
-
+    
+    @NotBlank(message = "Author is required")
+    @Size(max = 100, message = "Author name cannot exceed 100 characters")
     @Column(nullable = false)
     private String author;
-
+    
+    @NotBlank(message = "ISBN is required")
+    // @ISBN(message = "Invalid ISBN format")
     @Column(unique = true, nullable = false)
     private String isbn;
-
+    
+    @Size(max = 100, message = "Publisher name cannot exceed 100 characters")
     private String publisher;
+    
+    @PastOrPresent(message = "Publication date must be in the past or present")
     private LocalDate publicationDate;
+    
+    @NotBlank(message = "Category is required")
+    @Size(max = 50, message = "Category cannot exceed 50 characters")
     private String category;
-    private int totalCopies;
-    private int availableCopies;
-    private String shelfLocation;
+    
+    @NotBlank(message = "Language is required")
+    @Size(max = 30, message = "Language cannot exceed 30 characters")
+    private String language = "English";
+    
+    @PositiveOrZero(message = "Total copies cannot be negative")
+    @Column(nullable = false)
+    private int totalCopies = 1;
+    
+    @PositiveOrZero(message = "Available copies cannot be negative")
+    @Column(nullable = false)
+    private int availableCopies = 1;
+    
+    @Size(max = 1000, message = "Description cannot exceed 1000 characters")
+    private String description;
+    
+    // @URL(message = "Invalid URL format for cover image")
+    // private String coverImage;
+    
+    // Constructors
+    public Book() {
+    }
+
+    public Book(String title, String author, String isbn) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+    }
 
     // Getters and Setters
     public Long getId() {
@@ -89,12 +125,24 @@ public class Book {
         this.category = category;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     public int getTotalCopies() {
         return totalCopies;
     }
 
     public void setTotalCopies(int totalCopies) {
         this.totalCopies = totalCopies;
+        // Ensure available copies never exceed total copies
+        if (this.availableCopies > totalCopies) {
+            this.availableCopies = totalCopies;
+        }
     }
 
     public int getAvailableCopies() {
@@ -102,14 +150,43 @@ public class Book {
     }
 
     public void setAvailableCopies(int availableCopies) {
-        this.availableCopies = availableCopies;
+        this.availableCopies = Math.min(availableCopies, this.totalCopies);
     }
 
-    public String getShelfLocation() {
-        return shelfLocation;
+    public String getDescription() {
+        return description;
     }
 
-    public void setShelfLocation(String shelfLocation) {
-        this.shelfLocation = shelfLocation;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    // public String getCoverImage() {
+    //     return coverImage;
+    // }
+
+    // public void setCoverImage(String coverImage) {
+    //     this.coverImage = coverImage;
+    // }
+
+    // Helper methods
+    public boolean isAvailable() {
+        return availableCopies > 0;
+    }
+
+    public void incrementCopies(int amount) {
+        this.totalCopies += amount;
+        this.availableCopies += amount;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", availableCopies=" + availableCopies +
+                '}';
     }
 }

@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<RegisterUser, Long> {
     // Custom query for login (optional)
     @Query("SELECT u FROM RegisterUser u WHERE u.email = :email AND u.password = :password")
     RegisterUser registerUser(@Param("email") String email, @Param("password") String password);
+
+    
 }

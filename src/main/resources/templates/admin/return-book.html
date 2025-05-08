@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Return Books</title>
   <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+  <link rel="stylesheet" th:href="@{/css/return.css}">
 </head>
+
 <body>
 
   <!-- Sidebar -->
@@ -16,17 +19,16 @@
     <a th:href="@{/admin/members}">Members</a>
     <a th:href="@{/admin/issue}">Issue Books</a>
     <a href="#" class="active">Return Books</a>
-    <a th:href="@{/admin/reports}">Reports</a>
   </div>
 
   <!-- Main content -->
   <div class="main">
-    
+
     <!-- Top Navbar -->
     <div class="topnav">
       <h2>Book Returns Management</h2>
       <div class="nav-links">
-        <a th:text="${session.loggedInUser.name}" href="#">Admin</a>
+        <a href="#">Admin</a>
         <a th:href="@{/logout}">Logout</a>
       </div>
     </div>
@@ -36,42 +38,44 @@
       <!-- Return Form -->
       <div class="card return-form-card">
         <h3>Return a Book</h3>
-        
+
         <form th:action="@{/admin/return}" method="post" class="return-form">
           <div class="form-group">
             <label for="issueId">Select Issued Book</label>
             <select id="issueId" name="issueId" class="form-control" required>
               <option value="">Select Issued Book</option>
-              <option th:each="issue : ${issuedBooks}" 
-                      th:value="${issue.id}"
-                      th:text="${issue.bookTitle + ' (Issued to: ' + issue.memberName + ')'}">
+              <option th:each="issue : ${issuedBooks}" th:value="${issue.id}"
+                th:text="${issue.bookTitle + ' (Issued to: ' + issue.memberName + ')'}">
               </option>
             </select>
           </div>
-          
+
           <div class="form-group">
             <label for="returnDate">Return Date</label>
-            <input type="date" id="returnDate" name="returnDate" class="form-control" th:value="${#temporals.format(today, 'yyyy-MM-dd')}" required>
+            <input type="date" id="returnDate" name="returnDate" class="form-control"
+              th:value="${#temporals.format(today, 'yyyy-MM-dd')}" required>
           </div>
-          
+
           <div class="form-group">
             <label for="fineAmount">Fine Amount (if applicable)</label>
-            <input type="number" id="fineAmount" name="fineAmount" class="form-control" placeholder="0.00" step="0.01" min="0">
+            <input type="number" id="fineAmount" name="fineAmount" class="form-control" placeholder="0.00" step="0.01"
+              min="0">
           </div>
-          
+
           <div class="form-group">
             <label for="notes">Notes</label>
-            <textarea id="notes" name="notes" class="form-control" rows="3" placeholder="Any additional notes..."></textarea>
+            <textarea id="notes" name="notes" class="form-control" rows="3"
+              placeholder="Any additional notes..."></textarea>
           </div>
-          
+
           <button type="submit" class="btn btn-return">Process Return</button>
         </form>
       </div>
-      
+
       <!-- Recent Returns -->
       <div class="card recent-returns-card">
         <h3>Recent Returns</h3>
-        
+
         <div class="search-filter">
           <input type="text" placeholder="Search returns..." class="search-input" id="returnsSearch">
           <select class="filter-select">
@@ -82,7 +86,7 @@
           </select>
           <button class="btn btn-search">Filter</button>
         </div>
-        
+
         <table class="returns-table">
           <thead>
             <tr>
@@ -113,7 +117,7 @@
             </tr>
           </tbody>
         </table>
-        
+
         <div class="pagination">
           <a href="#">&laquo;</a>
           <a href="#" class="active">1</a>
@@ -123,7 +127,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Return Statistics -->
     <div class="stats-section">
       <div class="stat-card stat-primary">
@@ -141,4 +145,5 @@
     </div>
   </div>
 </body>
+
 </html>
