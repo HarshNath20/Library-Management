@@ -36,30 +36,30 @@
     <div class="dashboard">
       <div class="card card-primary">
         <h3>Total Books</h3>
-        <p th:text="${totalBooks}" style="font-size: 24px;">1,250</p>
+        <p style="font-size: 24px;">1,250</p>
       </div>
       <div class="card card-success">
         <h3>Total Members</h3>
-        <p th:text="${totalMembers}" style="font-size: 24px;">540</p>
+        <p style="font-size: 24px;">540</p>
       </div>
       <div class="card card-warning">
         <h3>Books Issued</h3>
-        <p th:text="${booksIssued}" style="font-size: 24px;">320</p>
+        <p style="font-size: 24px;">320</p>
       </div>
       <div class="card card-danger">
         <h3>Overdue Returns</h3>
-        <p th:text="${overdueReturns}" style="font-size: 24px;">23</p>
+        <p  style="font-size: 24px;">23</p>
       </div>
     </div>
 
-    <!-- Activity -->
+    <!-- Activity
     <div class="activity">
       <h3>Recent Activity</h3>
       <p th:if="${recentActivityList == null or #lists.isEmpty(recentActivityList)}">No recent activity to show.</p>
       <ul th:if="${recentActivityList != null}">
         <li th:each="activity : ${recentActivityList}" th:text="${activity}"></li>
       </ul>
-    </div>
+    </div> -->
 
   </div>
 </body>

@@ -146,3 +146,10 @@ public String getLastIssuedMemberName() {
                '}';
     }
 }
+
+
+// INSERT INTO books (title, author, isbn, total_copies, available_copies, category, language)
+// VALUES 
+//   ('Clean Code', 'Robert C. Martin', '9780132350884', 5, 5, 'Programming', 'English'),
+//   ('Think and Grow Rich', 'Napoleon Hill', '9780449214923', 7, 7, 'Self-help', 'English'),
+//   ('Ikigai', 'Héctor García', '9780143130727', 8, 8, 'Philosophy', 'Spanish');

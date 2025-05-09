@@ -80,8 +80,8 @@
             <!-- <td th:text="${member.booksBorrowed}">3</td> -->
             <td>
               <!-- <a th:href="@{'/admin/members/edit/' + ${member.id}}" class="btn btn-edit">Edit</a> -->
-              <a th:href="@{'/admin/members/delete/' + ${member.id}}" class="btn btn-delete">Delete</a>
-              <a th:href="@{'/admin/members/details/' + ${member.id}}" class="btn btn-info">Details</a>
+              <a th:href="@{'/admin/delete-member?memberId=' + ${member.id}}" class="btn btn-delete">Delete</a>
+              <!-- <a th:href="@{'/admin/members/details/' + ${member.id}}" class="btn btn-info">Details</a> -->
             </td>
           </tr>
           <tr th:if="${members == null or #lists.isEmpty(members)}">
@@ -91,16 +91,16 @@
       </table>
 
       <!-- Pagination -->
-      <div class="pagination">
+      <!-- <div class="pagination">
         <a href="#">&laquo;</a>
         <a href="#" class="active">1</a>
         <a href="#">2</a>
         <a href="#">3</a>
         <a href="#">&raquo;</a>
-      </div>
+      </div> -->
 
       <!-- Member Statistics -->
-      <div class="member-stats">
+      <!-- <div class="member-stats">
         <div class="stat-card">
           <h4>Total Members</h4>
           <p th:text="${totalMembers}" class="stat-number">125</p>
@@ -113,7 +113,7 @@
           <h4>Overdue Members</h4>
           <p th:text="${overdueMembers}" class="stat-number">7</p>
         </div>
-      </div>
+      </div> -->
     </div>
 
   </div>

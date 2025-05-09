@@ -46,4 +46,10 @@ public class BookLoanService {
         loanRepository.deleteById(loanId);
     }
 
+    public boolean hasActiveLoans(Long memberId) {
+        // Check if the member has any active loans
+        List<BookLoan> activeLoans = loanRepository.findByMemberIdAndReturnDateIsNull(memberId);
+        return !activeLoans.isEmpty();
+    }
+
 }

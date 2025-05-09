@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,9 +16,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mgcfgs.LibraryManagement.model.Book;
 import com.mgcfgs.LibraryManagement.model.BookLoan;
+import com.mgcfgs.LibraryManagement.model.BookLoan.LoanStatus;
 import com.mgcfgs.LibraryManagement.model.RegisterUser;
+import com.mgcfgs.LibraryManagement.model.ReturnHistory;
 import com.mgcfgs.LibraryManagement.services.BookLoanService;
 import com.mgcfgs.LibraryManagement.services.BooksServices;
+import com.mgcfgs.LibraryManagement.services.ReturnHistoryServices;
 import com.mgcfgs.LibraryManagement.services.UserServices;
 
 import org.springframework.ui.Model;
@@ -34,6 +38,9 @@ public class AdminController {
 
     @Autowired
     private BookLoanService bookLoanService;
+
+    @Autowired
+    private ReturnHistoryServices returnHistoryService;
 
     // Predefined categories
     private final List<String> categories = Arrays.asList(
@@ -135,7 +142,13 @@ public class AdminController {
     public String ReturnBook(Model model) {
         // This method retrieves all issued books from the database and adds them to the
         List<BookLoan> loans = bookLoanService.getAllLoans();
+        List<ReturnHistory> returnHistories = returnHistoryService.getAllReturnHistories();
         model.addAttribute("loans", loans);
+        model.addAttribute("returnHistories", returnHistories);
+        model.addAttribute("todaysReturns", returnHistoryService.getTodaysReturnsCount());
+        model.addAttribute("overdueReturns", returnHistoryService.getOverdueReturnsCount());
+        model.addAttribute("totalFines", returnHistoryService.getTotalFinesCollected());
+
         return "admin/return-book";
     }
 
@@ -157,11 +170,62 @@ public class AdminController {
         book.setAvailableCopies(book.getAvailableCopies() + 1);
         booksServices.saveBook(book);
 
+        // Save return info to ReturnHistory
+        ReturnHistory history = new ReturnHistory();
+        history.setBookTitle(book.getTitle());
+        history.setMember(loan.getMember());
+        history.setIssueDate(loan.getIssueDate());
+        history.setDueDate(loan.getDueDate());
+        loan.getStatus();
+        history.setStatus(LoanStatus.RETURNED); // Set status to null or appropriate value
+        history.setReturnDate(LocalDate.now());
+        history.setFineAmount(fineAmount != null ? fineAmount : 0.0);
+        returnHistoryService.saveReturnHistory(history);
+
         // Remove the loan
         bookLoanService.deleteLoan(loanId);
 
         redirectAttributes.addFlashAttribute("success", "Book returned successfully.");
         return "redirect:/admin/return";
+    }
+
+    @GetMapping("/delete-book")
+    public String DeleteBook(@RequestParam Long bookId, RedirectAttributes redirectAttributes) {
+        // This method deletes a book from the database
+        Book book = booksServices.getBookById(bookId);
+        if (book != null) {
+            booksServices.deleteBook(bookId);
+            redirectAttributes.addFlashAttribute("success", "Book deleted successfully.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Book not found.");
+        }
+        return "redirect:/admin/books";
+    }
+
+    @GetMapping("/admin/delete-member")
+    public String deleteMember(@RequestParam Long memberId, RedirectAttributes redirectAttributes) {
+        try {
+            RegisterUser user = userService.getUserById(memberId);
+            if (user == null) {
+                redirectAttributes.addFlashAttribute("error", "Member not found.");
+                return "redirect:/admin/members";
+            }
+
+            // Check if member has any active book loans
+            if (bookLoanService.hasActiveLoans(memberId)) {
+                redirectAttributes.addFlashAttribute("error",
+                        "Cannot delete member with active book loans.");
+                return "redirect:/admin/members";
+            }
+
+            userService.deleteUser(memberId);
+            redirectAttributes.addFlashAttribute("success",
+                    "Member deleted successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error",
+                    "Error deleting member: " + e.getMessage());
+        }
+        return "redirect:/admin/members";
     }
 
 }

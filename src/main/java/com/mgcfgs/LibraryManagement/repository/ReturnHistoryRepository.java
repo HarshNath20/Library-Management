@@ -1,0 +1,18 @@
+package com.mgcfgs.LibraryManagement.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.mgcfgs.LibraryManagement.model.RegisterUser;
+import com.mgcfgs.LibraryManagement.model.ReturnHistory;
+
+@Repository
+public interface ReturnHistoryRepository extends JpaRepository<ReturnHistory, Long> {
+    // Custom query methods can be defined here if needed
+    // For example, find by member or book
+    List<ReturnHistory> findByMember(RegisterUser member);
+    // List<ReturnHistory> findByBook(Book book);
+
+}

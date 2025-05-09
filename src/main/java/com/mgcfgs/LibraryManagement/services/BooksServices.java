@@ -29,5 +29,10 @@ public class BooksServices {
         return bookRepository.findById(bookId).orElse(null);
     }
 
+    public void deleteBook(Long bookId) {
+        // This method deletes a book by its ID from the database.
+        bookRepository.deleteById(bookId);
+    }
+
 
 }

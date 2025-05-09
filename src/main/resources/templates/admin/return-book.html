@@ -100,22 +100,26 @@
             </tr>
           </thead>
           <tbody>
-            <tr th:each="return : ${recentReturns}">
-              <td th:text="${return.id}">RET-1001</td>
-              <td th:text="${return.bookTitle}">The Great Gatsby</td>
-              <td th:text="${return.memberName}">John Doe</td>
-              <td th:text="${#temporals.format(return.issueDate, 'yyyy-MM-dd')}">2023-05-15</td>
-              <td th:text="${#temporals.format(return.returnDate, 'yyyy-MM-dd')}">2023-06-10</td>
-              <td th:text="${return.fine != null ? '$' + return.fine : 'None'}">$5.00</td>
+            <tr th:each="returnItem : ${returnHistories}">
+              <td th:text="${returnItem.id}">RET-1001</td>
+              <td th:text="${returnItem.bookTitle}">The Great Gatsby</td>
+              <td th:text="${returnItem.member.name}">John Doe</td>
+              <td th:text="${#temporals.format(returnItem.issueDate, 'yyyy-MM-dd')}">2023-05-15</td>
+              <td th:text="${#temporals.format(returnItem.returnDate, 'yyyy-MM-dd')}">2023-06-10</td>
+              <td
+                th:text="${returnItem.fineAmount != null && returnItem.fineAmount > 0 ? '$' + returnItem.fineAmount : 'None'}">
+                $5.00</td>
               <td>
-                <span th:if="${return.overdue}" class="status-overdue">Late</span>
-                <span th:unless="${return.overdue}" class="status-ontime">On Time</span>
+                <span th:if="${returnItem.returnDate.isAfter(returnItem.dueDate)}" class="status-overdue">Late</span>
+                <span th:unless="${returnItem.returnDate.isAfter(returnItem.dueDate)}" class="status-ontime">On
+                  Time</span>
               </td>
             </tr>
-            <tr th:if="${recentReturns == null or #lists.isEmpty(recentReturns)}">
+            <tr th:if="${returnHistories == null or #lists.isEmpty(returnHistories)}">
               <td colspan="7">No recent returns found</td>
             </tr>
           </tbody>
+
         </table>
 
         <div class="pagination">
@@ -132,17 +136,18 @@
     <div class="stats-section">
       <div class="stat-card stat-primary">
         <h4>Today's Returns</h4>
-        <p th:text="${todaysReturns}" class="stat-number">5</p>
+        <p th:text="${todaysReturns != null ? todaysReturns : 0}" class="stat-number">0</p>
       </div>
       <div class="stat-card stat-warning">
         <h4>Overdue Returns</h4>
-        <p th:text="${overdueReturns}" class="stat-number">3</p>
+        <p th:text="${overdueReturns != null ? overdueReturns : 0}" class="stat-number">0</p>
       </div>
       <div class="stat-card stat-danger">
         <h4>Total Fines</h4>
-        <p th:text="${'$' + totalFines}" class="stat-number">$45.50</p>
+        <p th:text="${totalFines != null ? '$' + totalFines : '$0.00'}" class="stat-number">$0.00</p>
       </div>
     </div>
+
   </div>
   <script>
     function updateReturnDate() {
