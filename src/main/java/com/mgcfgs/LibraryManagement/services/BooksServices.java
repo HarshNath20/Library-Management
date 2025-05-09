@@ -20,10 +20,13 @@ public class BooksServices {
     }
 
     public List<Book> getAllBooks() {
-       return bookRepository.findAll();
+        return bookRepository.findAll();
         // This method retrieves all books from the database.
     }
 
-
+    public Book getBookById(Long bookId) {
+        // This method retrieves a book by its ID from the database.
+        return bookRepository.findById(bookId).orElse(null);
+    }
 
 }

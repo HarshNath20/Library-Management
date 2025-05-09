@@ -1,0 +1,37 @@
+package com.mgcfgs.LibraryManagement.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.mgcfgs.LibraryManagement.model.Book;
+import com.mgcfgs.LibraryManagement.model.BookLoan;
+import com.mgcfgs.LibraryManagement.repository.BookLoanRepository;
+import com.mgcfgs.LibraryManagement.repository.BookRepository;
+
+import jakarta.transaction.Transactional;
+
+@Service
+@Transactional
+public class BookLoanService {
+
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private BookLoanRepository loanRepository;
+
+    public List<BookLoan> getAllLoans() {
+        return loanRepository.findAll();
+    }
+
+    public void saveLoan(BookLoan loan) {
+        loanRepository.save(loan);
+    }
+
+    public void saveBook(Book book) {
+        bookRepository.save(book);
+    }
+
+}

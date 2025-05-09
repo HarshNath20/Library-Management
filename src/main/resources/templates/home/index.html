@@ -5,16 +5,149 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>User Home - Library System</title>
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --accent-color: #e74c3c;
+      --light-gray: #f5f5f5;
+      --white: #ffffff;
+      --dark-gray: #7f8c8d;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--light-gray);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .navbar {
+      background-color: var(--primary-color);
+      color: var(--white);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar h2 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .navbar a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .navbar a:hover {
+      opacity: 0.8;
+    }
+
+    .welcome {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      text-align: center;
+    }
+
+    .welcome h1 {
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .welcome p {
+      color: var(--dark-gray);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .actions {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      padding: 1.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 1px solid #e0e0e0;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h3 {
+      color: var(--primary-color);
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+    }
+
+    .card p {
+      color: var(--dark-gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .card a {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background-color: var(--secondary-color);
+      color: var(--white);
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+
+    .card a:hover {
+      background-color: #2980b9;
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .welcome {
+        padding: 0 1rem;
+      }
+
+      .actions {
+        padding: 0 1rem;
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
   <!-- Navbar -->
   <div class="navbar">
-    <h2>Library System - User Home</h2>
-    <div class="links">
-      <!-- Show 'Logout' if user is logged in -->
+    <h2>Library System</h2>
+    <div class="navbar-links">
       <a th:if="${session.loggedInUser != null}" th:href="@{/profile}">Profile</a>
       <a th:if="${session.loggedInUser != null}" th:href="@{/logout}">Logout</a>
 
@@ -23,10 +156,9 @@
     </div>
   </div>
 
-
-  <!-- Welcome -->
+  <!-- Welcome Section -->
   <div class="welcome">
-    <h1>Welcome, <span th:text="${session.loggedInUser?.name} ?: 'Username'">Username</span></h1>
+    <h1>Welcome, <span th:text="${session.loggedInUser?.name} ?: 'Guest'">User</span></h1>
     <p>Explore books, check your borrow history, and manage your account.</p>
   </div>
 
@@ -35,23 +167,26 @@
     <div class="card">
       <h3>View Books</h3>
       <p>Browse the entire collection of available books.</p>
-      <a th:href="@{/view-books}">Browse</a>
+      <a th:href="@{/view-books}">Browse Books</a>
     </div>
+
     <div class="card">
       <h3>Borrowed Books</h3>
-      <p>Check the books you’ve currently borrowed.</p>
-      <a th:href="@{/borrowed}">View</a>
+      <p>Check the books you've currently borrowed.</p>
+      <a th:href="@{/user/borrowed}">View Borrowed</a>
     </div>
+
     <div class="card">
       <h3>Return History</h3>
       <p>See the books you've returned previously.</p>
-      <a th:href="@{/history}">History</a>
+      <a th:href="@{/user/history}">View History</a>
     </div>
-    <div class="card">
+
+    <!-- <div class="card">
       <h3>Update Profile</h3>
       <p>Edit your personal information and contact details.</p>
-      <a th:href="@{/profile/edit}">Edit</a>
-    </div>
+      <a th:href="@{/user/profile/edit}">Edit Profile</a>
+    </div> -->
   </div>
 
 </body>

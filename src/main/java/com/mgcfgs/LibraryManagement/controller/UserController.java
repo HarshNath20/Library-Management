@@ -48,10 +48,10 @@ public class UserController {
         }
 
         // 2. Check if passwords match
-        if (!user.getPassword().equals(user.getConfirm_password())) {
-            model.addAttribute("passwordError", "Passwords do not match");
-            return "user/register";
-        }
+        // if (!user.getPassword().equals(user.getConfirm_password())) {
+        //     model.addAttribute("passwordError", "Passwords do not match");
+        //     return "user/register";
+        // }
 
         // 3. Check if user already exists
         RegisterUser existingUser = userServices.findByEmail(user.getEmail());
@@ -129,6 +129,16 @@ public class UserController {
         model.addAttribute("loggedInUser", user);
         model.addAttribute("books", books);
         return "user/viewBooks"; // create view-books.html page in templates/user
+    }
+
+    @GetMapping("/update-profile")
+    public String updateProfile(HttpSession session, Model model) {
+        RegisterUser loggedInUser = (RegisterUser) session.getAttribute("loggedInUser");
+        if (loggedInUser != null) {
+            model.addAttribute("user", loggedInUser);
+            return "user/updateProfile"; // create update-profile.html page in templates/user
+        }
+        return "redirect:/login";
     }
 
 }

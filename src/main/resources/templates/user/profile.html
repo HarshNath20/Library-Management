@@ -3,9 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>User Profile</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/profile.css}">
 </head>
 
@@ -13,46 +12,44 @@
 
     <!-- Navbar -->
     <div class="navbar">
-        <h2>Library System - User Home</h2>
-        <div class="links">
-            <!-- Show 'Logout' if user is logged in -->
-            <a th:if="${session.loggedInUser != null}" th:href="@{/profile}">Profile</a>
-            <a th:if="${session.loggedInUser != null}" th:href="@{/logout}">Logout</a>
-
-            <!-- Show 'Login' if user is not logged in -->
-            <a th:if="${session.loggedInUser == null}" th:href="@{/login}">Login</a>
+        <h2>Library System - User Profile</h2>
+        <div class="navbar-links">
+            <a th:href="@{/}">Dashboard</a>
+            <!-- <a th:href="@{/user/books}">Books</a> -->
+            <a th:href="@{/logout}">Logout</a>
         </div>
     </div>
 
-    <!-- Profile Page -->
-    <div class="container profile-container">
-        <div class="row">
-            <div class="col-md-4 text-center">
-                <!-- Avatar with first initial and orange background -->
-                <div class="avatar">
+    <!-- Profile Card -->
+    <div class="profile-container">
+        <div class="profile-card">
+            <!-- Profile Sidebar -->
+            <div class="profile-sidebar">
+                <div class="profile-avatar">
                     <span th:text="${session.loggedInUser.name.substring(0,1).toUpperCase()}">U</span>
                 </div>
-
                 <h3 th:text="${session.loggedInUser.name}">User</h3>
-                <p th:text="${session.loggedInUser.email}">example@mail.com</p>
+                <p th:text="${session.loggedInUser.email}">user@example.com</p>
             </div>
 
-            <div class="col-md-8">
-                <h4>User Details</h4>
+            <!-- Profile Main Content -->
+            <div class="profile-main">
+                <h3 class="profile-title">User Details</h3>
                 <ul class="user-details">
                     <li><strong>Name:</strong> <span th:text="${session.loggedInUser.name}">John Doe</span></li>
                     <li><strong>Email:</strong> <span
                             th:text="${session.loggedInUser.email}">john.doe@example.com</span></li>
-                    <li><strong>Address:</strong> <span>123 Main Street, Amritsar</span></li>
+                    <li><strong>Books Borrowed:</strong> <span th:text="${currentLoans} + ' currently'">2
+                            currently</span></li>
                 </ul>
 
-                <!-- Optionally add buttons for editing or deleting the profile -->
                 <div class="profile-actions">
-                    <a href="/edit-profile" class="btn">Edit Profile</a>
-                    <a href="/logout" class="btn logout-btn">Logout</a>
-                    <a href="/delete-profile" class="btn delete-btn"
-                        onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">Delete
-                        Account</a>
+                    <a th:href="@{/update-profile}" class="btn btn-primary">Edit Profile</a>
+                    <a th:href="@{/logout}" class="btn btn-logout">Logout</a>
+                    <a th:href="@{/user/delete-profile}" class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+                        Delete Account
+                    </a>
                 </div>
 
                 <div th:if="${param.updated}" class="alert success-alert">

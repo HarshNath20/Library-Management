@@ -21,6 +21,11 @@
   border-bottom: 1px solid #eee;
 }
 
+td {
+  font-size: 1rem;
+  color: #495057;
+}
+
 /* Form Styles */
 .issue-form {
   display: grid;
@@ -192,7 +197,7 @@ select.form-control {
   .issue-form {
     grid-template-columns: 1fr;
   }
-  
+
   .btn-issue {
     max-width: 100%;
   }
@@ -203,11 +208,11 @@ select.form-control {
     display: block;
     overflow-x: auto;
   }
-  
+
   .search-filter {
     flex-direction: column;
   }
-  
+
   .btn-search {
     width: 100%;
   }
@@ -217,7 +222,7 @@ select.form-control {
   .card {
     padding: 15px;
   }
-  
+
   .pagination {
     flex-wrap: wrap;
   }
