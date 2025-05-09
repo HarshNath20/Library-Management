@@ -6,10 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.mgcfgs.LibraryManagement.model.Book;
 import com.mgcfgs.LibraryManagement.model.BookLoan;
 
 public interface BookLoanRepository extends JpaRepository<BookLoan, Long> {
-    List<BookLoan> findByMemberEmailAndStatus(String email, BookLoan.LoanStatus status);
+    @Query("SELECT bl.book FROM BookLoan bl WHERE bl.status = 'ACTIVE'")
+    List<Book> findAllIssuedBooks();
 
     @Query("SELECT bl FROM BookLoan bl WHERE bl.book.id = :bookId AND bl.status = 'ACTIVE'")
     List<BookLoan> findActiveLoansByBookId(@Param("bookId") Long bookId);

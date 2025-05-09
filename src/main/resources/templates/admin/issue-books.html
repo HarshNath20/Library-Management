@@ -65,11 +65,11 @@
               th:value="${#temporals.format(today, 'yyyy-MM-dd')}" required>
           </div>
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="dueDate">Due Date</label>
             <input type="date" id="dueDate" name="dueDate" class="form-control"
               th:value="${#temporals.format(dueDate, 'yyyy-MM-dd')}" required>
-          </div>
+          </div> -->
           <span th:if="${success != null or error != null}" th:text="${success != null} ? ${success} : ${error}"
             th:style="${success != null} ? 'color: green;' : 'color: red;'">
           </span>

@@ -128,6 +128,12 @@ public class Book {
     public boolean isAvailable() {
         return this.availableCopies > 0;
     }
+// Add this method in Book entity or in a DTO
+public String getLastIssuedMemberName() {
+    return this.bookLoans != null && !this.bookLoans.isEmpty()
+        ? this.bookLoans.get(this.bookLoans.size() - 1).getMember().getName()
+        : "N/A";
+}
 
     @Override
     public String toString() {

@@ -34,4 +34,16 @@ public class BookLoanService {
         bookRepository.save(book);
     }
 
+    public List<Book> getAllIssuedBooks() {
+        return loanRepository.findAllIssuedBooks();
+    }
+
+    public BookLoan getLoanById(Long loanId) {
+        return loanRepository.findById(loanId).orElse(null);
+    }
+
+    public void deleteLoan(Long loanId) {
+        loanRepository.deleteById(loanId);
+    }
+
 }

@@ -65,10 +65,10 @@ public class AdminController {
     public String IssuedBooks(Model model) {
         // This method retrieves all issued books from the database and adds them to the
         // model
-        List<Book> issuedBooks = booksServices.getAllBooks();
+        List<Book> books = booksServices.getAllBooks();
         List<RegisterUser> users = userService.getAllUsers();
         List<BookLoan> loans = bookLoanService.getAllLoans();
-        model.addAttribute("Books", issuedBooks);
+        model.addAttribute("Books", books);
         model.addAttribute("members", users);
         model.addAttribute("loans", loans);
         return "admin/issue-books";
@@ -132,8 +132,36 @@ public class AdminController {
     }
 
     @GetMapping("/return")
-    public String ReturnBook() {
+    public String ReturnBook(Model model) {
+        // This method retrieves all issued books from the database and adds them to the
+        List<BookLoan> loans = bookLoanService.getAllLoans();
+        model.addAttribute("loans", loans);
         return "admin/return-book";
+    }
+
+    @PostMapping("/return")
+    public String ReturnBook(
+            @RequestParam Long loanId,
+            @RequestParam(required = false) Double fineAmount,
+            RedirectAttributes redirectAttributes) {
+
+        BookLoan loan = bookLoanService.getLoanById(loanId);
+
+        if (loan == null) {
+            redirectAttributes.addFlashAttribute("error", "Loan not found.");
+            return "redirect:/admin/return";
+        }
+
+        // Update book's available copies
+        Book book = loan.getBook();
+        book.setAvailableCopies(book.getAvailableCopies() + 1);
+        booksServices.saveBook(book);
+
+        // Remove the loan
+        bookLoanService.deleteLoan(loanId);
+
+        redirectAttributes.addFlashAttribute("success", "Book returned successfully.");
+        return "redirect:/admin/return";
     }
 
 }

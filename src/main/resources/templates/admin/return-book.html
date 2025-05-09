@@ -41,19 +41,19 @@
 
         <form th:action="@{/admin/return}" method="post" class="return-form">
           <div class="form-group">
-            <label for="issueId">Select Issued Book</label>
-            <select id="issueId" name="issueId" class="form-control" required>
+            <label for="loanId">Select Issued Book</label>
+            <select id="loanId" name="loanId" class="form-control" required onchange="updateReturnDate()">
               <option value="">Select Issued Book</option>
-              <option th:each="issue : ${issuedBooks}" th:value="${issue.id}"
-                th:text="${issue.bookTitle + ' (Issued to: ' + issue.memberName + ')'}">
+              <option th:each="loan : ${loans}" th:value="${loan.id}"
+                th:data-due-date="${#temporals.format(loan.dueDate, 'yyyy-MM-dd')}"
+                th:text="${loan.book.title + ' (Issued to: ' + loan.member.name + ')'}">
               </option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="returnDate">Return Date</label>
-            <input type="date" id="returnDate" name="returnDate" class="form-control"
-              th:value="${#temporals.format(today, 'yyyy-MM-dd')}" required>
+            <input type="date" id="returnDate" name="returnDate" class="form-control" required>
           </div>
 
           <div class="form-group">
@@ -144,6 +144,31 @@
       </div>
     </div>
   </div>
+  <script>
+    function updateReturnDate() {
+      const select = document.getElementById('loanId');
+      const selectedOption = select.options[select.selectedIndex];
+      const dueDateStr = selectedOption.getAttribute('data-due-date');
+      const dueDate = new Date(dueDateStr);
+      const today = new Date();
+      const returnInput = document.getElementById('returnDate');
+      const fineInput = document.getElementById('fineAmount');
+
+      // Set return date to today
+      returnInput.value = today.toISOString().split('T')[0];
+
+      // Compare dates and calculate fine
+      const finePerDay = 10; // Customize per your policy
+      if (today > dueDate) {
+        const diffTime = today - dueDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        fineInput.value = diffDays * finePerDay;
+      } else {
+        fineInput.value = 0;
+      }
+    }
+  </script>
+
 </body>
 
 </html>
