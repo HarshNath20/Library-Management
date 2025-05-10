@@ -18,6 +18,11 @@ body {
   line-height: 1.6;
 }
 
+.header-links {
+  display: flex;
+  gap: 1rem;
+}
+
 /* Navigation */
 .navbar {
   background-color: var(--primary-color);
