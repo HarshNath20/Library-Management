@@ -19,6 +19,9 @@ public interface BookLoanRepository extends JpaRepository<BookLoan, Long> {
     @Query("SELECT COUNT(bl) FROM BookLoan bl WHERE bl.member.id = :memberId AND bl.status = 'ACTIVE'")
     int countActiveLoansByMember(@Param("memberId") Long memberId);
 
+    // @Query("SELECT bl FROM BookLoan bl WHERE bl.member.id = :memberId")
+    // List<BookLoan> findByMemberId(Long memberId);
+
     @Query("SELECT bl FROM BookLoan bl WHERE bl.member.id = :memberId AND bl.returnDate IS NULL")
     List<BookLoan> findByMemberIdAndReturnDateIsNull(@Param("memberId") Long memberId);
 }

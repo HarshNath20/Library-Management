@@ -44,4 +44,8 @@ public class ReturnHistoryServices {
                 .sum();
     }
 
+    public List<ReturnHistory> getReturnHistoryByMember(Long id) {
+        return returnHistoryRepository.findByMemberId(id);
+    }
+
 }

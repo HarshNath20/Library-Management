@@ -40,7 +40,10 @@
         <h3>Library Members</h3>
         <!-- <a th:href="@{/admin/members/add}" class="btn btn-primary">Add New Member</a> -->
       </div>
-
+      <span th:if="${success != null or error != null}" th:text="${success != null} ? ${success} : ${error}"
+        th:style="${success != null} ? 'color: green;' : 'color: red;'">
+      </span>
+      <br>
       <!-- Search and Filter -->
       <!-- <div class="search-filter">
         <input type="text" placeholder="Search members..." class="search-input">
@@ -89,7 +92,7 @@
               </form>
             </td>
           </tr>
-          <tr th:if="${members == null or #lists.isEmpty(members)}">
+          <tr th:if="${#lists.isEmpty(members)}">
             <td colspan="8">No members registered</td>
           </tr>
         </tbody>

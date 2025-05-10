@@ -141,7 +141,3 @@ public class RegisterUser {
     }
 }
 
-// Query to Add Admin User to Database:
-
-// INSERT INTO user (name, email, password, role)
-// VALUES ('admin', 'admin@mail.com', 'admin123', 'ADMIN');

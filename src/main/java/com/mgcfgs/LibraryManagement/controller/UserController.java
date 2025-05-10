@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mgcfgs.LibraryManagement.model.Book;
+import com.mgcfgs.LibraryManagement.model.BookLoan;
 import com.mgcfgs.LibraryManagement.model.LoginUser;
 import com.mgcfgs.LibraryManagement.model.RegisterUser;
 import com.mgcfgs.LibraryManagement.model.ReturnHistory;
+import com.mgcfgs.LibraryManagement.services.BookLoanService;
 import com.mgcfgs.LibraryManagement.services.BooksServices;
+import com.mgcfgs.LibraryManagement.services.ReturnHistoryServices;
 import com.mgcfgs.LibraryManagement.services.UserServices;
 
 import jakarta.servlet.http.HttpSession;
@@ -29,6 +32,12 @@ public class UserController {
 
     @Autowired
     private BooksServices booksServices;
+
+    @Autowired
+    private ReturnHistoryServices returnService;
+
+    @Autowired
+    private BookLoanService loanService;
 
     @GetMapping("/register")
     public String registerPage(Model model) {
@@ -146,13 +155,30 @@ public class UserController {
     public String returnBook(HttpSession session, Model model) {
         RegisterUser loggedInUser = (RegisterUser) session.getAttribute("loggedInUser");
 
-        ReturnHistory returnHistory = new ReturnHistory();
-        model.addAttribute("returnHistory", returnHistory);
-        if (loggedInUser != null) {
-            model.addAttribute("user", loggedInUser);
-            return "user/returnBook"; // create return-book.html page in templates/user
+        if (loggedInUser == null) {
+            return "redirect:/login";
         }
-        return "redirect:/login";
+
+        // Get the user's return history from service
+        List<ReturnHistory> returnHistory = returnService.getReturnHistoryByMember(loggedInUser.getId());
+
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("returnHistory", returnHistory);
+        return "user/return-book";
+    }
+
+    @GetMapping("/borrowed-book")
+    public String borrowedBook(HttpSession session, Model model) {
+        RegisterUser loggedInUser = (RegisterUser) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+
+        List<BookLoan> activeLoans = loanService.getActiveLoansByMemberId(loggedInUser.getId());
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("loans", activeLoans);
+        return "user/borrowed-books";
     }
 
 }

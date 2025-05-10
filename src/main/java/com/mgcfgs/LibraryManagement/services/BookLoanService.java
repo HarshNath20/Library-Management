@@ -52,4 +52,8 @@ public class BookLoanService {
         return !activeLoans.isEmpty();
     }
 
+    public List<BookLoan> getActiveLoansByMemberId(Long id) {
+        return loanRepository.findByMemberIdAndReturnDateIsNull(id);
+    }
+
 }

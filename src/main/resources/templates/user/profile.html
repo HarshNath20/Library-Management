@@ -16,7 +16,7 @@
         <div class="navbar-links">
             <a th:href="@{/}">Dashboard</a>
             <!-- <a th:href="@{/user/books}">Books</a> -->
-            <a th:href="@{/logout}">Logout</a>
+            <!-- <a th:href="@{/logout}">Logout</a> -->
         </div>
     </div>
 
@@ -44,12 +44,12 @@
                 </ul>
 
                 <div class="profile-actions">
-                    <a th:href="@{/update-profile}" class="btn btn-primary">Edit Profile</a>
+                    <!-- <a th:href="@{/update-profile}" class="btn btn-primary">Edit Profile</a> -->
                     <a th:href="@{/logout}" class="btn btn-logout">Logout</a>
-                    <a th:href="@{/user/delete-profile}" class="btn btn-danger"
+                    <!-- <a th:href="@{/user/delete-profile}" class="btn btn-danger"
                         onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
                         Delete Account
-                    </a>
+                    </a> -->
                 </div>
 
                 <div th:if="${param.updated}" class="alert success-alert">

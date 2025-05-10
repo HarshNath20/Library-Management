@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -23,6 +22,8 @@ import com.mgcfgs.LibraryManagement.services.BookLoanService;
 import com.mgcfgs.LibraryManagement.services.BooksServices;
 import com.mgcfgs.LibraryManagement.services.ReturnHistoryServices;
 import com.mgcfgs.LibraryManagement.services.UserServices;
+
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
 
@@ -48,12 +49,36 @@ public class AdminController {
             "History", "Biography", "Technology", "Art");
 
     @GetMapping("/dashboard")
-    public String Admin() {
+    public String adminDashboard(HttpSession session, RedirectAttributes redirectAttributes) {
+        // Check if user is logged in
+        RegisterUser loggedInUser = (RegisterUser) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Please login to access the dashboard");
+            return "redirect:/login";
+        }
+
+        // Check if user has admin role
+        if (!"ADMIN".equalsIgnoreCase(loggedInUser.getRole())) {
+            redirectAttributes.addFlashAttribute("error", "Unauthorized access - Admin privileges required");
+            return "redirect:/";
+        }
+
         return "admin/dashboard";
     }
 
     @GetMapping("/books")
-    public String Books(Model model) {
+    public String Books(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        RegisterUser loggedInUser = (RegisterUser) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Please login to access the dashboard");
+            return "redirect:/login";
+        }
+
+        // Check if user has admin role
+        if (!"ADMIN".equalsIgnoreCase(loggedInUser.getRole())) {
+            redirectAttributes.addFlashAttribute("error", "Unauthorized access - Admin privileges required");
+            return "redirect:/";
+        }
         // This method retrieves all books from the database and adds them to the model
         List<Book> books = booksServices.getAllBooks();
         model.addAttribute("books", books);
@@ -61,7 +86,18 @@ public class AdminController {
     }
 
     @GetMapping("/members")
-    public String Members(Model model) {
+    public String Members(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        RegisterUser loggedInUser = (RegisterUser) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Please login to access the dashboard");
+            return "redirect:/login";
+        }
+
+        // Check if user has admin role
+        if (!"ADMIN".equalsIgnoreCase(loggedInUser.getRole())) {
+            redirectAttributes.addFlashAttribute("error", "Unauthorized access - Admin privileges required");
+            return "redirect:/";
+        }
         // This method retrieves all users from the database and adds them to the model
         List<RegisterUser> users = userService.getAllUsers();
         model.addAttribute("members", users);
@@ -69,7 +105,18 @@ public class AdminController {
     }
 
     @GetMapping("/issue")
-    public String IssuedBooks(Model model) {
+    public String IssuedBooks(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        RegisterUser loggedInUser = (RegisterUser) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Please login to access the dashboard");
+            return "redirect:/login";
+        }
+
+        // Check if user has admin role
+        if (!"ADMIN".equalsIgnoreCase(loggedInUser.getRole())) {
+            redirectAttributes.addFlashAttribute("error", "Unauthorized access - Admin privileges required");
+            return "redirect:/";
+        }
         // This method retrieves all issued books from the database and adds them to the
         // model
         List<Book> books = booksServices.getAllBooks();
@@ -123,7 +170,18 @@ public class AdminController {
     }
 
     @GetMapping("/books/add-book")
-    public String AddBook(Model model) {
+    public String AddBook(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        RegisterUser loggedInUser = (RegisterUser) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Please login to access the dashboard");
+            return "redirect:/login";
+        }
+
+        // Check if user has admin role
+        if (!"ADMIN".equalsIgnoreCase(loggedInUser.getRole())) {
+            redirectAttributes.addFlashAttribute("error", "Unauthorized access - Admin privileges required");
+            return "redirect:/";
+        }
         // This method adds a new book to the model
         model.addAttribute("book", new Book());
         model.addAttribute("categories", categories);
@@ -139,7 +197,19 @@ public class AdminController {
     }
 
     @GetMapping("/books/edit-book")
-    public String EditBook(@RequestParam Long bookId, Model model) {
+    public String EditBook(@RequestParam Long bookId, Model model, HttpSession session,
+            RedirectAttributes redirectAttributes) {
+        RegisterUser loggedInUser = (RegisterUser) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Please login to access the dashboard");
+            return "redirect:/login";
+        }
+
+        // Check if user has admin role
+        if (!"ADMIN".equalsIgnoreCase(loggedInUser.getRole())) {
+            redirectAttributes.addFlashAttribute("error", "Unauthorized access - Admin privileges required");
+            return "redirect:/";
+        }
         // This method retrieves a book by its ID and adds it to the model for editing
         Book book = booksServices.getBookById(bookId);
         if (book != null) {
@@ -152,7 +222,18 @@ public class AdminController {
     }
 
     @GetMapping("/return")
-    public String ReturnBook(Model model) {
+    public String ReturnBook(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        RegisterUser loggedInUser = (RegisterUser) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Please login to access the dashboard");
+            return "redirect:/login";
+        }
+
+        // Check if user has admin role
+        if (!"ADMIN".equalsIgnoreCase(loggedInUser.getRole())) {
+            redirectAttributes.addFlashAttribute("error", "Unauthorized access - Admin privileges required");
+            return "redirect:/";
+        }
         // This method retrieves all issued books from the database and adds them to the
         List<BookLoan> loans = bookLoanService.getAllLoans();
         List<ReturnHistory> returnHistories = returnHistoryService.getAllReturnHistories();
@@ -190,6 +271,7 @@ public class AdminController {
         history.setBookAuthor(loan.getBook().getAuthor());
         history.setIssueDate(loan.getIssueDate());
         history.setDueDate(loan.getDueDate());
+        history.setMemberId(loan.getMember().getId());
         loan.getStatus();
         history.setStatus(LoanStatus.RETURNED); // Set status to null or appropriate value
         history.setReturnDate(LocalDate.now());
@@ -204,7 +286,18 @@ public class AdminController {
     }
 
     @GetMapping("/delete-book")
-    public String DeleteBook(@RequestParam Long bookId, RedirectAttributes redirectAttributes) {
+    public String DeleteBook(@RequestParam Long bookId, RedirectAttributes redirectAttributes, HttpSession session) {
+        RegisterUser loggedInUser = (RegisterUser) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("error", "Please login to access the dashboard");
+            return "redirect:/login";
+        }
+
+        // Check if user has admin role
+        if (!"ADMIN".equalsIgnoreCase(loggedInUser.getRole())) {
+            redirectAttributes.addFlashAttribute("error", "Unauthorized access - Admin privileges required");
+            return "redirect:/";
+        }
         // This method deletes a book from the database
         Book book = booksServices.getBookById(bookId);
         if (book != null) {
@@ -215,33 +308,6 @@ public class AdminController {
         }
         return "redirect:/admin/books";
     }
-
-    // @GetMapping("/admin/delete-member")
-    // public String deleteMember(@RequestParam Long memberId, RedirectAttributes
-    // redirectAttributes) {
-    // try {
-    // RegisterUser user = userService.getUserById(memberId);
-    // if (user == null) {
-    // redirectAttributes.addFlashAttribute("error", "Member not found.");
-    // return "redirect:/admin/members";
-    // }
-
-    // // Check if member has any active book loans
-    // if (bookLoanService.hasActiveLoans(memberId)) {
-    // redirectAttributes.addFlashAttribute("error",
-    // "Cannot delete member with active book loans.");
-    // return "redirect:/admin/members";
-    // }
-
-    // userService.deleteUser(memberId);
-    // redirectAttributes.addFlashAttribute("success",
-    // "Member deleted successfully.");
-    // } catch (Exception e) {
-    // redirectAttributes.addFlashAttribute("error",
-    // "Error deleting member: " + e.getMessage());
-    // }
-    // return "redirect:/admin/members";
-    // }
 
     @PostMapping("/delete-member")
     public String deleteMember(

@@ -25,6 +25,9 @@ public class ReturnHistory {
     @JoinColumn(name = "book_author", nullable = false)
     private String bookAuthor;
 
+    @JoinColumn(name = "member_id", nullable = false)
+    private Long memberId;
+
     @JoinColumn(name = "member_name", nullable = false)
     private String memberName;
 
@@ -73,6 +76,14 @@ public class ReturnHistory {
 
     public void setBookTitle(String bookTitle) {
         this.bookTitle = bookTitle;
+    }
+
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
     }
 
     public String getMemberName() {

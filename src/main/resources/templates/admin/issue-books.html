@@ -70,6 +70,7 @@
             <input type="date" id="dueDate" name="dueDate" class="form-control"
               th:value="${#temporals.format(dueDate, 'yyyy-MM-dd')}" required>
           </div> -->
+          <br>
           <span th:if="${success != null or error != null}" th:text="${success != null} ? ${success} : ${error}"
             th:style="${success != null} ? 'color: green;' : 'color: red;'">
           </span>
@@ -111,7 +112,7 @@
                 <span th:unless="${issue.overdue}" class="status-active">Active</span>
               </td>
             </tr>
-            <tr th:if="${currentIssues == null or #lists.isEmpty(currentIssues)}">
+            <tr th:if="${#lists.isEmpty(loans)}">
               <td colspan="6">No books currently issued</td>
             </tr>
           </tbody>
