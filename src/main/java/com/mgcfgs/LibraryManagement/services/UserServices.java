@@ -1,5 +1,7 @@
 package com.mgcfgs.LibraryManagement.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,16 @@ public class UserServices {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
     }
+
+    public List<RegisterUser> getAllUsers() {
+        // This method retrieves all users from the database.
+        return userRepository.findAll();
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
 
 }
 

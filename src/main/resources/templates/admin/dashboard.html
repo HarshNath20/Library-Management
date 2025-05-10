@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Library Admin Panel</title>
   <link rel="stylesheet" th:href="@{/css/dashboard.css}">
 </head>
+
 <body>
 
   <!-- Sidebar -->
@@ -16,17 +18,16 @@
     <a th:href="@{/admin/members}">Members</a>
     <a th:href="@{/admin/issue}">Issue Books</a>
     <a th:href="@{/admin/return}">Return Books</a>
-    <a th:href="@{/admin/reports}">Reports</a>
   </div>
 
   <!-- Main content -->
   <div class="main">
-    
+
     <!-- Top Navbar -->
     <div class="topnav">
       <h2>Library Management System</h2>
       <div class="nav-links">
-        <a th:text="${session.loggedInUser.name}" href="#">Admin</a>
+        <a href="#">Admin</a>
         <a th:href="@{/logout}">Logout</a>
       </div>
     </div>
@@ -35,31 +36,32 @@
     <div class="dashboard">
       <div class="card card-primary">
         <h3>Total Books</h3>
-        <p th:text="${totalBooks}" style="font-size: 24px;">1,250</p>
+        <p style="font-size: 24px;">1,250</p>
       </div>
       <div class="card card-success">
         <h3>Total Members</h3>
-        <p th:text="${totalMembers}" style="font-size: 24px;">540</p>
+        <p style="font-size: 24px;">540</p>
       </div>
       <div class="card card-warning">
         <h3>Books Issued</h3>
-        <p th:text="${booksIssued}" style="font-size: 24px;">320</p>
+        <p style="font-size: 24px;">320</p>
       </div>
       <div class="card card-danger">
         <h3>Overdue Returns</h3>
-        <p th:text="${overdueReturns}" style="font-size: 24px;">23</p>
+        <p  style="font-size: 24px;">23</p>
       </div>
     </div>
 
-    <!-- Activity -->
+    <!-- Activity
     <div class="activity">
       <h3>Recent Activity</h3>
       <p th:if="${recentActivityList == null or #lists.isEmpty(recentActivityList)}">No recent activity to show.</p>
       <ul th:if="${recentActivityList != null}">
         <li th:each="activity : ${recentActivityList}" th:text="${activity}"></li>
       </ul>
-    </div>
+    </div> -->
 
   </div>
 </body>
+
 </html>
