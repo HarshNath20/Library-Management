@@ -12,7 +12,7 @@ import com.mgcfgs.LibraryManagement.model.ReturnHistory;
 public interface ReturnHistoryRepository extends JpaRepository<ReturnHistory, Long> {
     // Custom query methods can be defined here if needed
     // For example, find by member or book
-    List<ReturnHistory> findByMember(RegisterUser member);
+    List<ReturnHistory> findByMemberName(String memberName);
     // List<ReturnHistory> findByBook(Book book);
 
 }

@@ -59,7 +59,8 @@ public class Book {
     private List<BookLoan> bookLoans = new ArrayList<>();
 
     // Constructors
-    public Book() {}
+    public Book() {
+    }
 
     public Book(String title, String author, String isbn) {
         this.title = title;
@@ -68,31 +69,74 @@ public class Book {
     }
 
     // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getAuthor() { return author; }
-    public void setAuthor(String author) { this.author = author; }
+    public String getTitle() {
+        return title;
+    }
 
-    public String getIsbn() { return isbn; }
-    public void setIsbn(String isbn) { this.isbn = isbn; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public String getPublisher() { return publisher; }
-    public void setPublisher(String publisher) { this.publisher = publisher; }
+    public String getAuthor() {
+        return author;
+    }
 
-    public LocalDate getPublicationDate() { return publicationDate; }
-    public void setPublicationDate(LocalDate publicationDate) { this.publicationDate = publicationDate; }
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
+    public String getIsbn() {
+        return isbn;
+    }
 
-    public String getLanguage() { return language; }
-    public void setLanguage(String language) { this.language = language; }
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
 
-    public int getTotalCopies() { return totalCopies; }
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public LocalDate getPublicationDate() {
+        return publicationDate;
+    }
+
+    public void setPublicationDate(LocalDate publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public int getTotalCopies() {
+        return totalCopies;
+    }
+
     public void setTotalCopies(int totalCopies) {
         this.totalCopies = totalCopies;
         if (this.availableCopies > totalCopies) {
@@ -100,15 +144,25 @@ public class Book {
         }
     }
 
-    public int getAvailableCopies() { return availableCopies; }
+    public int getAvailableCopies() {
+        return availableCopies;
+    }
+
     public void setAvailableCopies(int availableCopies) {
         this.availableCopies = Math.min(availableCopies, this.totalCopies);
     }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getDescription() {
+        return description;
+    }
 
-    public List<BookLoan> getBookLoans() { return bookLoans; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<BookLoan> getBookLoans() {
+        return bookLoans;
+    }
 
     // Utility Methods
     public void addLoan(BookLoan loan) {
@@ -128,28 +182,22 @@ public class Book {
     public boolean isAvailable() {
         return this.availableCopies > 0;
     }
-// Add this method in Book entity or in a DTO
-public String getLastIssuedMemberName() {
-    return this.bookLoans != null && !this.bookLoans.isEmpty()
-        ? this.bookLoans.get(this.bookLoans.size() - 1).getMember().getName()
-        : "N/A";
-}
+
+    // Add this method in Book entity or in a DTO
+    public String getLastIssuedMemberName() {
+        return this.bookLoans != null && !this.bookLoans.isEmpty()
+                ? this.bookLoans.get(this.bookLoans.size() - 1).getMember().getName()
+                : "N/A";
+    }
 
     @Override
     public String toString() {
         return "Book{" +
-               "id=" + id +
-               ", title='" + title + '\'' +
-               ", author='" + author + '\'' +
-               ", isbn='" + isbn + '\'' +
-               ", availableCopies=" + availableCopies +
-               '}';
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", availableCopies=" + availableCopies +
+                '}';
     }
 }
-
-
-// INSERT INTO books (title, author, isbn, total_copies, available_copies, category, language)
-// VALUES 
-//   ('Clean Code', 'Robert C. Martin', '9780132350884', 5, 5, 'Programming', 'English'),
-//   ('Think and Grow Rich', 'Napoleon Hill', '9780449214923', 7, 7, 'Self-help', 'English'),
-//   ('Ikigai', 'Héctor García', '9780143130727', 8, 8, 'Philosophy', 'Spanish');

@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -138,6 +138,19 @@ public class AdminController {
         return "redirect:/admin/books";
     }
 
+    @GetMapping("/books/edit-book")
+    public String EditBook(@RequestParam Long bookId, Model model) {
+        // This method retrieves a book by its ID and adds it to the model for editing
+        Book book = booksServices.getBookById(bookId);
+        if (book != null) {
+            model.addAttribute("book", book);
+            model.addAttribute("categories", categories);
+            return "admin/edit-book";
+        } else {
+            return "redirect:/admin/books";
+        }
+    }
+
     @GetMapping("/return")
     public String ReturnBook(Model model) {
         // This method retrieves all issued books from the database and adds them to the
@@ -173,7 +186,8 @@ public class AdminController {
         // Save return info to ReturnHistory
         ReturnHistory history = new ReturnHistory();
         history.setBookTitle(book.getTitle());
-        history.setMember(loan.getMember());
+        history.setMember(loan.getMember().getName());
+        history.setBookAuthor(loan.getBook().getAuthor());
         history.setIssueDate(loan.getIssueDate());
         history.setDueDate(loan.getDueDate());
         loan.getStatus();
@@ -202,8 +216,38 @@ public class AdminController {
         return "redirect:/admin/books";
     }
 
-    @GetMapping("/admin/delete-member")
-    public String deleteMember(@RequestParam Long memberId, RedirectAttributes redirectAttributes) {
+    // @GetMapping("/admin/delete-member")
+    // public String deleteMember(@RequestParam Long memberId, RedirectAttributes
+    // redirectAttributes) {
+    // try {
+    // RegisterUser user = userService.getUserById(memberId);
+    // if (user == null) {
+    // redirectAttributes.addFlashAttribute("error", "Member not found.");
+    // return "redirect:/admin/members";
+    // }
+
+    // // Check if member has any active book loans
+    // if (bookLoanService.hasActiveLoans(memberId)) {
+    // redirectAttributes.addFlashAttribute("error",
+    // "Cannot delete member with active book loans.");
+    // return "redirect:/admin/members";
+    // }
+
+    // userService.deleteUser(memberId);
+    // redirectAttributes.addFlashAttribute("success",
+    // "Member deleted successfully.");
+    // } catch (Exception e) {
+    // redirectAttributes.addFlashAttribute("error",
+    // "Error deleting member: " + e.getMessage());
+    // }
+    // return "redirect:/admin/members";
+    // }
+
+    @PostMapping("/delete-member")
+    public String deleteMember(
+            @RequestParam Long memberId,
+            RedirectAttributes redirectAttributes) {
+
         try {
             RegisterUser user = userService.getUserById(memberId);
             if (user == null) {
@@ -211,7 +255,6 @@ public class AdminController {
                 return "redirect:/admin/members";
             }
 
-            // Check if member has any active book loans
             if (bookLoanService.hasActiveLoans(memberId)) {
                 redirectAttributes.addFlashAttribute("error",
                         "Cannot delete member with active book loans.");
@@ -225,6 +268,7 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("error",
                     "Error deleting member: " + e.getMessage());
         }
+
         return "redirect:/admin/members";
     }
 

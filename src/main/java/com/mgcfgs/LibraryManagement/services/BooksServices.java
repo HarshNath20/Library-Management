@@ -34,5 +34,16 @@ public class BooksServices {
         bookRepository.deleteById(bookId);
     }
 
+    public void updateBook(Long bookId, Book updatedBook) {
+        // This method updates a book by its ID in the database.
+        Book existingBook = bookRepository.findById(bookId).orElse(null);
+        if (existingBook != null) {
+            existingBook.setTitle(updatedBook.getTitle());
+            existingBook.setAuthor(updatedBook.getAuthor());
+            existingBook.setPublisher(updatedBook.getPublisher());
+            existingBook.setPublicationDate(updatedBook.getPublicationDate());
+            bookRepository.save(existingBook);
+        }
+    }
 
 }

@@ -76,7 +76,7 @@
       <div class="card recent-returns-card">
         <h3>Recent Returns</h3>
 
-        <div class="search-filter">
+        <!-- <div class="search-filter">
           <input type="text" placeholder="Search returns..." class="search-input" id="returnsSearch">
           <select class="filter-select">
             <option>All Returns</option>
@@ -85,7 +85,7 @@
             <option>On Time</option>
           </select>
           <button class="btn btn-search">Filter</button>
-        </div>
+        </div> -->
 
         <table class="returns-table">
           <thead>
@@ -103,7 +103,7 @@
             <tr th:each="returnItem : ${returnHistories}">
               <td th:text="${returnItem.id}">RET-1001</td>
               <td th:text="${returnItem.bookTitle}">The Great Gatsby</td>
-              <td th:text="${returnItem.member.name}">John Doe</td>
+              <td th:text="${returnItem.memberName}">John Doe</td>
               <td th:text="${#temporals.format(returnItem.issueDate, 'yyyy-MM-dd')}">2023-05-15</td>
               <td th:text="${#temporals.format(returnItem.returnDate, 'yyyy-MM-dd')}">2023-06-10</td>
               <td
@@ -122,18 +122,18 @@
 
         </table>
 
-        <div class="pagination">
+        <!-- <div class="pagination">
           <a href="#">&laquo;</a>
           <a href="#" class="active">1</a>
           <a href="#">2</a>
           <a href="#">3</a>
           <a href="#">&raquo;</a>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Return Statistics -->
-    <div class="stats-section">
+    <!-- <div class="stats-section">
       <div class="stat-card stat-primary">
         <h4>Today's Returns</h4>
         <p th:text="${todaysReturns != null ? todaysReturns : 0}" class="stat-number">0</p>
@@ -146,7 +146,7 @@
         <h4>Total Fines</h4>
         <p th:text="${totalFines != null ? '$' + totalFines : '$0.00'}" class="stat-number">$0.00</p>
       </div>
-    </div>
+    </div> -->
 
   </div>
   <script>

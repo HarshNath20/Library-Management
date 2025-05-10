@@ -1,19 +1,15 @@
 package com.mgcfgs.LibraryManagement.model;
 
 import java.time.LocalDate;
-
 import com.mgcfgs.LibraryManagement.model.BookLoan.LoanStatus;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 @Entity
 public class ReturnHistory {
@@ -26,9 +22,11 @@ public class ReturnHistory {
     @JoinColumn(name = "book_id", nullable = false)
     private String bookTitle;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "member_id", nullable = false)
-    private RegisterUser member;
+    @JoinColumn(name = "book_author", nullable = false)
+    private String bookAuthor;
+
+    @JoinColumn(name = "member_name", nullable = false)
+    private String memberName;
 
     @Column(name = "issue_date", nullable = false)
     private LocalDate issueDate;
@@ -45,14 +43,16 @@ public class ReturnHistory {
 
     @Column(name = "fine_amount")
     private Double fineAmount;
+
     // Constructors
     public ReturnHistory() {
     }
 
-    public ReturnHistory(String bookTitle, RegisterUser member, LocalDate dueDate) {
+    public ReturnHistory(String bookTitle, String memberName, String bookAuthor, LocalDate dueDate) {
         this();
         this.bookTitle = bookTitle;
-        this.member = member;
+        this.bookAuthor = bookAuthor;
+        this.memberName = memberName;
         this.dueDate = dueDate;
         this.issueDate = LocalDate.now();
         this.status = LoanStatus.ACTIVE;
@@ -75,12 +75,20 @@ public class ReturnHistory {
         this.bookTitle = bookTitle;
     }
 
-    public RegisterUser getMember() {
-        return member;
+    public String getMemberName() {
+        return memberName;
     }
 
-    public void setMember(RegisterUser member) {
-        this.member = member;
+    public void setMember(String memberName) {
+        this.memberName = memberName;
+    }
+
+    public String getBookAuthor() {
+        return bookAuthor;
+    }
+
+    public void setBookAuthor(String bookAuthor) {
+        this.bookAuthor = bookAuthor;
     }
 
     public LocalDate getIssueDate() {
@@ -127,7 +135,8 @@ public class ReturnHistory {
     public String toString() {
         return "BookLoan{id=" + id +
                 ", bookTitle=" + bookTitle +
-                ", memberName=" + (member != null ? member.getName() : "null") +
+                ", memberName=" + memberName +
+                ", bookAuthor=" + bookAuthor +
                 ", issueDate=" + issueDate +
                 ", dueDate=" + dueDate +
                 ", status=" + status + "}";

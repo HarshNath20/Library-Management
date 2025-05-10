@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.mgcfgs.LibraryManagement.model.Book;
 import com.mgcfgs.LibraryManagement.model.LoginUser;
 import com.mgcfgs.LibraryManagement.model.RegisterUser;
+import com.mgcfgs.LibraryManagement.model.ReturnHistory;
 import com.mgcfgs.LibraryManagement.services.BooksServices;
 import com.mgcfgs.LibraryManagement.services.UserServices;
 
@@ -49,8 +50,8 @@ public class UserController {
 
         // 2. Check if passwords match
         // if (!user.getPassword().equals(user.getConfirm_password())) {
-        //     model.addAttribute("passwordError", "Passwords do not match");
-        //     return "user/register";
+        // model.addAttribute("passwordError", "Passwords do not match");
+        // return "user/register";
         // }
 
         // 3. Check if user already exists
@@ -137,6 +138,19 @@ public class UserController {
         if (loggedInUser != null) {
             model.addAttribute("user", loggedInUser);
             return "user/updateProfile"; // create update-profile.html page in templates/user
+        }
+        return "redirect:/login";
+    }
+
+    @GetMapping("/return-book")
+    public String returnBook(HttpSession session, Model model) {
+        RegisterUser loggedInUser = (RegisterUser) session.getAttribute("loggedInUser");
+
+        ReturnHistory returnHistory = new ReturnHistory();
+        model.addAttribute("returnHistory", returnHistory);
+        if (loggedInUser != null) {
+            model.addAttribute("user", loggedInUser);
+            return "user/returnBook"; // create return-book.html page in templates/user
         }
         return "redirect:/login";
     }
